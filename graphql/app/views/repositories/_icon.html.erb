@@ -1,0 +1,10 @@
+<%graphql
+  fragment Repository on Repository {
+    isFork
+    isMirror
+    isPrivate
+  }
+%>
+<% repository = Views::Repositories::Icon::Repository.new(repository) %>
+
+

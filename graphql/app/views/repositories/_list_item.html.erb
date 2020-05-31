@@ -1,0 +1,43 @@
+<%graphql
+  fragment Repository on Repository {
+    id
+    owner {
+      login
+    }
+    name
+    primaryLanguage {
+            name
+          }
+    stargazers {
+      totalCount
+
+    }
+    createdAt
+    ...Views::Repositories::Icon::Repository
+    ...Views::Repositories::Star::Repository
+  }
+%>
+<% repository = Views::Repositories::ListItem::Repository.new(repository) %>
+
+<li class="list-group-item">
+  <%= render "repositories/star", repository: repository %>
+  <%= render "repositories/icon", repository: repository %>
+
+  <a href="<%= repository_path(repository.id) %>">
+    <%= repository.owner.login %>/<%= repository.name %>
+  </a>
+  <span class="star-badge">
+  <%= reponame= repository.primaryLanguage.name if repository.primaryLanguage  %>
+</span>
+  <!-- <span class="star-badge">
+  <%= DateTime.parse(repository.createdAt).strftime("%B %Y")   %>
+</span>x -->
+</li>
+<% ['name' => repository.name, 'createdAt'=>DateTime.parse(repository.createdAt).strftime("%B %Y"),'primaryLanguage'=>reponame ] %>
+
+<% #@all_data[repository.id] = ['name' => repository.name] %>
+
+<% if !reponame.nil? %>
+<% @all_data[reponame] = repository.stargazers.totalCount %>
+<% end %>
+
